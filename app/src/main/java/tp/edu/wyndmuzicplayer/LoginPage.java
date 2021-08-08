@@ -33,24 +33,17 @@ public class LoginPage extends AppCompatActivity {
         Attempts =(TextView) findViewById(R.id.Attempts);
         Login =(Button)findViewById(R.id.loginbtn);
 
-        counting = new Timer();
-        counting.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                Intent intent = new Intent(LoginPage.this, HomePage.class);
-                startActivity(intent);
-                LoginPage.this.finish();
-            }
-        }, 3000);
 
-        Login.setOnClickListener(new View.OnClickListener() {
+
+        Button loginbtn = findViewById(R.id.loginbtn);
+        loginbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                validate(Email.getText().toString(), Password.getText().toString());
+                loginbtn();
             }
         });
     }
-    private void validate(String email, String password ){
+    public void validate(String email, String password ){
         if((email == "WyndMusic") && (password == "5678")){
             Intent intent = new Intent(LoginPage.this, HomePage.class);
             startActivity(intent);
@@ -62,7 +55,10 @@ public class LoginPage extends AppCompatActivity {
         }
     }
 
-    public void validate1(View view) {
+    public void loginbtn() {
+        Intent intent = new Intent(this, HomePage.class);
+        startActivity(intent);
 
     }
-}
+    }
+

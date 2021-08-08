@@ -17,6 +17,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 public class PlaySong extends AppCompatActivity {
 
@@ -29,7 +33,15 @@ public class PlaySong extends AppCompatActivity {
     private MediaPlayer player = new MediaPlayer();
     private ImageView btnPlayPause = null;
     private SongCollection songCollection = new SongCollection();
+    private SongCollection OriginalSongCollection = new SongCollection();
     Handler handler = new Handler();
+
+    List<Song> shuffleList = Arrays.asList(songCollection.songs);
+
+    ImageView repeatbtn;
+    ImageView shufflebtn;
+    Boolean repeatFlag = false;
+    Boolean shuffleFlag = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +71,11 @@ public class PlaySong extends AppCompatActivity {
                 }
             }
         });
+
+        repeatbtn = findViewById(R.id.repeatbtn);
+        shufflebtn = findViewById(R.id.shufflebtn);
+
+
         seekBar.setMax(player.getDuration());
         handler.removeCallbacks(bar);
         handler.postDelayed(bar,1000);
@@ -131,7 +148,13 @@ public class PlaySong extends AppCompatActivity {
             @Override
             public void onCompletion(MediaPlayer mp) {
                 Toast.makeText(PlaySong.this, "Song ended", Toast.LENGTH_SHORT).show();
-                btnPlayPause.setImageResource(R.drawable.play_btn);
+
+                if(repeatFlag){
+                    playOrPauseMusic(null);
+                }else{
+                    btnPlayPause.setImageResource(R.drawable.play_btn);
+
+                }
             }
         });
     }
@@ -160,5 +183,31 @@ public class PlaySong extends AppCompatActivity {
     {
         super.onBackPressed();
         player.release();
+    }
+
+    public void repeatOn(View view){
+
+        if(repeatFlag){
+            repeatbtn.setBackgroundResource(R.drawable.repeat_off);
+        }else{
+
+            repeatbtn.setBackgroundResource(R.drawable.repeat_on);
+        }
+        repeatFlag = !repeatFlag;
+    }
+    public void shuffleOn(View view) {
+
+        if (shuffleFlag) {
+            shufflebtn.setBackgroundResource(R.drawable.shuffle_off);
+            songCollection = new SongCollection();
+        } else {
+
+            shufflebtn.setBackgroundResource(R.drawable.shuffle_on);
+            Collections.shuffle(shuffleList);
+            shuffleList.toArray(songCollection.songs);
+
+        }
+
+        shuffleFlag = !shuffleFlag;
     }
     }
